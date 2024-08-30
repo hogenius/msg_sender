@@ -28,18 +28,18 @@ class Messaging(SingletonInstane):
             message = f"TestMode\n[{now.strftime('%Y-%m-%d %H:%M:%S')}]\n{str(msg)}"
         else:
             message = f"[{now.strftime('%Y-%m-%d %H:%M:%S')}]\n{str(msg)}"
-        print(message)
+        #print(message)
         self.queue_msg.put(message)
 
     async def RoutinePolling(self):
         while True:
             list_msg = self.simple_data.load_strings(TableType.Msg)
-            print(f"InitPollingRoutine list_msg: {list_msg}")
+            #print(f"InitPollingRoutine list_msg: {list_msg}")
             for msg in list_msg:
-                print(f"InitPollingRoutine : {msg}")
+                #print(f"InitPollingRoutine : {msg}")
                 self.queue_msg.put(msg)
 
-            print("InitPollingRoutine")
+            #print("InitPollingRoutine")
             await asyncio.sleep(ConfigInfo.Instance().polling_sec)
 
     async def RoutineMsg(self):
