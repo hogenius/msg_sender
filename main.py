@@ -6,9 +6,10 @@ is_test = False
 if __name__ == '__main__':
     
     Messaging.Instance().SetTest(is_test)
-    Messaging.Instance().Send("msg start")
+    #Messaging.Instance().Send("msg start")
     
     loop = asyncio.get_event_loop()
+    loop.create_task(Messaging.Instance().RoutinePolling())
     loop.create_task(Messaging.Instance().RoutineMsg())
     
     Messaging.Instance().InitHandler()

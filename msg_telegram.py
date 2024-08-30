@@ -15,20 +15,39 @@ from simple_data.simpledata import TableType
 class Messaging(SingletonInstane):
 
     def __init__(self):
+        self.queue_msg = Queue()
         self.simple_data = SimpleData(ConfigInfo.Instance().db_path)
         self.bot = telegram.Bot(ConfigInfo.Instance().telegram_token)
 
     def SetTest(self, isTest):
         self.is_test = isTest
 
-    async def RoutineMsg(self):
+    def Send(self, msg):
+        now = datetime.datetime.now()
+        if self.is_test:
+            message = f"TestMode\n[{now.strftime('%Y-%m-%d %H:%M:%S')}]\n{str(msg)}"
+        else:
+            message = f"[{now.strftime('%Y-%m-%d %H:%M:%S')}]\n{str(msg)}"
+        print(message)
+        self.queue_msg.put(message)
+
+    async def RoutinePolling(self):
         while True:
             list_msg = self.simple_data.load_strings(TableType.Msg)
-
+            print(f"InitPollingRoutine list_msg: {list_msg}")
             for msg in list_msg:
-                await self.bot.send_message(chat_id=ConfigInfo.Instance().telegram_chat_id, text=msg)
+                print(f"InitPollingRoutine : {msg}")
+                self.queue_msg.put(msg)
 
+            print("InitPollingRoutine")
             await asyncio.sleep(ConfigInfo.Instance().polling_sec)
+
+    async def RoutineMsg(self):
+        while True:
+            if 0 < self.queue_msg.qsize():
+                msg = self.queue_msg.get()
+                await self.bot.send_message(chat_id=ConfigInfo.Instance().telegram_chat_id, text=msg)
+            await asyncio.sleep(0)
 
     def InitHandler(self):
         print(f"InitHandler!!!")
@@ -48,48 +67,49 @@ class Messaging(SingletonInstane):
         await asyncio.sleep(0)
         print(f"handler_help!!!")
         self.Send("good day! what kind do you want?")
+        self.simple_data.add_string(TableType.Check, "good day! what kind do you want?")
 
     async def handler_refresh(self, update, context):
         await asyncio.sleep(0)
         print(f"handler_refresh!!!")
         self.Send("refresh coin list start")
-        self.simple_data.add_string(TableType.Check, "REFRESH_COIN_LIST")
+        self.simple_data.add_string(TableType.Check, "RefreshCoinList")
 
     async def handler_check(self, update, context):
         await asyncio.sleep(0)
         print(f"handler_check!!!")
         self.Send("check coin list start")
-        self.simple_data.add_string(TableType.Check, "CHECK_COIN_LIST")
+        self.simple_data.add_string(TableType.Check, "CheckCoinList")
 
     async def handler_reload_config(self, update, context):
         await asyncio.sleep(0)
         print(f"handler_reload_config!!!")
         self.Send("reload config start")
-        self.simple_data.add_string(TableType.Check, "RELOAD_CONFIG")
+        self.simple_data.add_string(TableType.Check, "ReloadConfing")
 
     async def handler_safe_mode(self, update, context):
         await asyncio.sleep(0)
         print(f"handler_safe_mode!!!")
         self.Send("safe mode start")
-        self.simple_data.add_string(TableType.Check, "SAFE_MODE")
+        self.simple_data.add_string(TableType.Check, "SetSafeMode")
 
     async def handler_normal_mode(self, update, context):
         await asyncio.sleep(0)
         print(f"handler_normal_mode!!!")
         self.Send("normal mode start")
-        self.simple_data.add_string(TableType.Check, "NORMAL_MODE")
+        self.simple_data.add_string(TableType.Check, "SetNormalMode")
 
     async def handler_pause(self, update, context):
         await asyncio.sleep(0)
         print(f"handler_pause!!!")
         self.Send("pause mode start")
-        self.simple_data.add_string(TableType.Check, "PAUSE")
+        self.simple_data.add_string(TableType.Check, "SetPause")
 
     async def handler_resume(self, update, context):
         await asyncio.sleep(0)
         print(f"handler_resume!!!")
         self.Send("resume mode start")
-        self.simple_data.add_string(TableType.Check, "RESUME")
+        self.simple_data.add_string(TableType.Check, "SetResume")
 
 '''
 async def help_handler(update, context):
