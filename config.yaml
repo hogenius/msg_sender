@@ -1,2 +1,2 @@
-db_path: "/home/user/hogenius/simple_msg.db"
+db_path: "/home/hogenius/simple_msg.db"
 loop_sec: 1
