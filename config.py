@@ -10,7 +10,7 @@ class ConfigInfo(SingletonInstane):
         with open('config.yaml') as f:
             config_data = yaml.load(f, Loader=yaml.FullLoader)
             self.db_path = config_data['db_path']
-            self.loop_sec = config_data['loop_sec']
+            self.polling_sec = config_data['polling_sec']
             
 
     def LoadSecurity(self):

@@ -28,7 +28,7 @@ class Messaging(SingletonInstane):
             for msg in list_msg:
                 await self.bot.send_message(chat_id=ConfigInfo.Instance().telegram_chat_id, text=msg)
 
-            await asyncio.sleep(ConfigInfo.Instance().loop_sec)
+            await asyncio.sleep(ConfigInfo.Instance().polling_sec)
 
     def InitHandler(self):
         print(f"InitHandler!!!")
