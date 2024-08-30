@@ -8,8 +8,8 @@ import datetime
 from queue import Queue
 from config import ConfigInfo
 from singletone import SingletonInstane
-from simple_data import SimpleData
-from simple_data import TableType
+from simple_data.simpledata import SimpleData
+from simple_data.simpledata import TableType
 
 
 class Messaging(SingletonInstane):
