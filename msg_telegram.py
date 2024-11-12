@@ -58,6 +58,7 @@ class Messaging(SingletonInstane):
         self.app.add_handler(CommandHandler("reload_config", self.handler_reload_config))
         self.app.add_handler(CommandHandler("safemode", self.handler_safe_mode))
         self.app.add_handler(CommandHandler("normalmode", self.handler_normal_mode))
+        self.app.add_handler(CommandHandler("attackmode", self.handler_normal_mode))
         self.app.add_handler(CommandHandler("pause", self.handler_pause))
         self.app.add_handler(CommandHandler("resume", self.handler_resume))
         
@@ -98,6 +99,12 @@ class Messaging(SingletonInstane):
         print(f"handler_normal_mode!!!")
         self.Send("normal mode start")
         self.simple_data.add_string(TableType.Check, "SetNormalMode")
+
+    async def handler_attack_mode(self, update, context):
+        await asyncio.sleep(0)
+        print(f"handler_attack_mode!!!")
+        self.Send("attack mode start")
+        self.simple_data.add_string(TableType.Check, "SetAttackMode")
 
     async def handler_pause(self, update, context):
         await asyncio.sleep(0)
