@@ -58,7 +58,7 @@ class Messaging(SingletonInstane):
         self.app.add_handler(CommandHandler("reload_config", self.handler_reload_config))
         self.app.add_handler(CommandHandler("safemode", self.handler_safe_mode))
         self.app.add_handler(CommandHandler("normalmode", self.handler_normal_mode))
-        self.app.add_handler(CommandHandler("attackmode", self.handler_normal_mode))
+        self.app.add_handler(CommandHandler("attackmode", self.handler_attack_mode))
         self.app.add_handler(CommandHandler("pause", self.handler_pause))
         self.app.add_handler(CommandHandler("resume", self.handler_resume))
         
