@@ -46,9 +46,15 @@ class Messaging(SingletonInstane):
         while True:
             if 0 < self.queue_msg.qsize():
                 msg = self.queue_msg.get()
-                await self.bot.send_message(chat_id=ConfigInfo.Instance().telegram_chat_id, text=msg)
-            await asyncio.sleep(0)
+                try:
+                    await self.bot.send_message(chat_id=ConfigInfo.Instance().telegram_chat_id, text=msg)
+                except Exception as e:
+                    print(f"RoutineMsg error : {e}")
+                    self.bot = telegram.Bot(ConfigInfo.Instance().telegram_token)
 
+            await asyncio.sleep(ConfigInfo.Instance().polling_sec)
+
+        
     def InitHandler(self):
         print(f"InitHandler!!!")
         self.app = Application.builder().token(ConfigInfo.Instance().telegram_token).build()
