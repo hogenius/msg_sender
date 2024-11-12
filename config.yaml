@@ -1,2 +1,2 @@
-db_path: "/home/hogenius/simple_msg.db"
+db_path: "../simple_msg.db"
 polling_sec: 1
