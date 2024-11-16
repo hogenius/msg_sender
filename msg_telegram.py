@@ -68,8 +68,16 @@ class Messaging(SingletonInstane):
         self.app.add_handler(CommandHandler("pause", self.handler_pause))
         self.app.add_handler(CommandHandler("resume", self.handler_resume))
         self.app.add_handler(CommandHandler("show_status", self.handler_show_status))
-        
+        self.app.add_handler(CommandHandler("cmd", self.handler_command))
+
         self.app.run_polling()
+
+    async def handler_command(self, update, context):
+        await asyncio.sleep(0)
+        print(f"handler_command")
+        command_args = "/".join(context.args)
+        self.Send(f"receive cmd {command_args}")
+        self.simple_data.add_string(TableType.Check, f"cmd/{command_args}")
 
     async def handler_help(self, update, context):
         await asyncio.sleep(0)
