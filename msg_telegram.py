@@ -67,6 +67,7 @@ class Messaging(SingletonInstane):
         self.app.add_handler(CommandHandler("attackmode", self.handler_attack_mode))
         self.app.add_handler(CommandHandler("pause", self.handler_pause))
         self.app.add_handler(CommandHandler("resume", self.handler_resume))
+        self.app.add_handler(CommandHandler("show_status", self.handler_show_status))
         
         self.app.run_polling()
 
@@ -123,6 +124,12 @@ class Messaging(SingletonInstane):
         print(f"handler_resume!!!")
         self.Send("resume mode start")
         self.simple_data.add_string(TableType.Check, "SetResume")
+
+    async def handler_show_status(self, update, context):
+        await asyncio.sleep(0)
+        print(f"handler_show_status!!!")
+        self.Send("show status")
+        self.simple_data.add_string(TableType.Check, "ShowStatus")
 
 '''
 async def help_handler(update, context):
