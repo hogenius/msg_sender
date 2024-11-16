@@ -74,7 +74,7 @@ class Messaging(SingletonInstane):
     async def handler_common(self, cmd, context):
         await asyncio.sleep(0)
         handle_msg = cmd
-        if 0 < context.args.length:
+        if 0 < len(context.args):
             command_args = "/".join(context.args)
             handle_msg = f"{handle_msg}/{command_args}"
             
