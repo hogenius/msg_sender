@@ -7,6 +7,7 @@ import asyncio
 import datetime
 from queue import Queue
 from config import ConfigInfo
+from simple_data.Logging import SimpleLogger
 from singletone import SingletonInstane
 from simple_data.simpledata import SimpleData
 from simple_data.simpledata import TableType
@@ -18,6 +19,7 @@ class Messaging(SingletonInstane):
         self.queue_msg = Queue()
         self.simple_data = SimpleData(ConfigInfo.Instance().db_path)
         self.bot = telegram.Bot(ConfigInfo.Instance().telegram_token)
+        self.logging = SimpleLogger(name="msg_sender", log_file="msg.log")
 
     def SetTest(self, isTest):
         self.is_test = isTest
@@ -50,6 +52,7 @@ class Messaging(SingletonInstane):
                     await self.bot.send_message(chat_id=ConfigInfo.Instance().telegram_chat_id, text=msg)
                 except Exception as e:
                     print(f"RoutineMsg error : {e}")
+                    self.logging.log(f"RoutineMsg error : {e}")
                     self.bot = telegram.Bot(ConfigInfo.Instance().telegram_token)
 
             await asyncio.sleep(ConfigInfo.Instance().polling_sec)
@@ -57,6 +60,7 @@ class Messaging(SingletonInstane):
         
     def InitHandler(self):
         print(f"InitHandler!!!")
+        self.logging.log("InitHandler!!!")
         self.app = Application.builder().token(ConfigInfo.Instance().telegram_token).build()
         self.app.add_handler(CommandHandler("refresh", self.handler_refresh))
         self.app.add_handler(CommandHandler("check", self.handler_check))
